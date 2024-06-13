@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<!--begin::Head-->
-	<head>
+	<head><base href="../../../">
 		<title><?php echo $page_title;?></title>
 		<meta charset="utf-8" />
 		<meta name="description" content="The most advanced Bootstrap Admin Theme on Themeforest trusted by 94,000 beginners and professionals. Multi-demo, Dark Mode, RTL support and complete React, Angular, Vue &amp; Laravel versions. Grab your copy now and get life-time updates for free." />
@@ -58,7 +58,6 @@
 					<!--end::Brand-->
 
 					<?php $this->load->view('side_bar.php'); ?>
-					<?php //include "side_bar.php"; ?>
 
 
 				</div>
@@ -66,6 +65,7 @@
 				<!--begin::Wrapper-->
 				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 					<!--header start-->
+
 					<?php $this->load->view('header.php'); ?>
 					<?php //include "header.php"; ?>
 				    <!--header end-->
@@ -108,150 +108,205 @@
 							<!--end::Container-->
 						</div>
 						<!--end::Toolbar-->
-						
+						<!--begin::Post-->
 						<div class="post d-flex flex-column-fluid" id="kt_post">
 							<!--begin::Container-->
 							<div id="kt_content_container" class="container-xxl">
+								<!--begin::Card-->
+								<div class="card">
+									<!--begin::Card header-->
+									<div class="card-header border-0 pt-6">
 
-								<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
-									
-									<!--begin::Card body-->
-									<div class="card-body p-9">
+										<?php
+						                         if($this->session->flashdata('success_message')){
+						                          ?>
 
-						                    
-										<!--begin::Form-->
-										<form id="kt_modal_update_password_form" class="form" method="post" >
+						                          <div class="alert alert-success">
+						                            <?php echo $this->session->flashdata('success_message');?>
+						                          </div>
+						                          <?php
+						                         }
+						                ?>
+						                <?php
+						                         if($this->session->flashdata('failed_message')){
+						                          ?>
 
-											<div class="d-flex flex-column mb-7 fv-row">
-												<!--begin::Label-->
-												<label class="fs-6 fw-bold mb-2">
-													<span class="">Medicine Category</span>
-													
-												</label>
-												<!--end::Label-->
-												<!--begin::Input-->
-												<select name="med_cat_id" aria-label="Select Category" data-control="select2" data-placeholder="Select Category..." class="form-select form-select-solid form-select-lg">
-													<!-- <option value="">Select Category...</option> -->
-													
-													<?php
-														foreach ($medicine_category_list as $key2 => $value2) {
-															?>
-																<option data-kt-flag="flags/indonesia.svg"
-																<?php
-																if(isset($medicine_info->med_cat_id))if ($medicine_info->med_cat_id==$value2->med_cat_id) {
-																	echo "selected";
-																}
-																?>
-																 value="<?php echo $value2->med_cat_id;?>"><?php echo $value2->med_cat_name;?></option>
-															<?php
-														}
+						                          <div class="alert alert-danger">
+						                            <?php echo $this->session->flashdata('failed_message');?>
+						                          </div>
+						                          <?php
+						                         }
+						                ?>
+
+										<!--begin::Card title-->
+										<div class="card-title">
+											<!--begin::Search-->
+											<div class="d-flex align-items-center position-relative my-1">
+												<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+												<span class="svg-icon svg-icon-1 position-absolute ms-6">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="black" />
+														<path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="black" />
+													</svg>
+												</span>
+												<!--end::Svg Icon-->
+												<input type="text" data-kt-user-table-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search user" />
+											</div>
+											<!--end::Search-->
+										</div>
+										<!--begin::Card title-->
+										<!--begin::Card toolbar-->
+										<div class="card-toolbar">
+											<!--begin::Toolbar-->
+											<div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
+												
+												<!--begin::Add user-->
+												
+												<!-- <a href="<?php echo base_url().'user/export_user_list';?>" class="btn btn-primary">
+												<span class="svg-icon svg-icon-2">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+														<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+													</svg>
+												</span>Export User</a> -->
+
+												&nbsp;
+												<?php
+												if ($this->admin->check_user_access('add-medicine-category')) {
 													?>
-													
-												</select>
-												<!--end::Input-->
+												<!--begin::Add user-->
+												<a href="<?php echo base_url().'medicine/add_agency_bill';?>" class="btn btn-primary">
+												<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+												<span class="svg-icon svg-icon-2">
+													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+														<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
+														<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
+													</svg>
+												</span>
+												<!--end::Svg Icon-->Add <?php echo $page_title;?></a>
+												<!--end::Add user-->
 
-						                        <div style="color: red;"><?php echo form_error('med_cat_id');?></div>
+													<?php
+												}
+												?>
 											</div>
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">Product Name</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-												<input class="form-control form-control-lg form-control-solid" type="hidden" placeholder="" name="med_id" autocomplete="off" value="<?php if(isset($medicine_info->med_id)){echo $medicine_info->med_id;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
+											<!--end::Toolbar-->
+											<!--begin::Group actions-->
+											<div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
+												<div class="fw-bolder me-5">
+												<span class="me-2" data-kt-user-table-select="selected_count"></span>Selected</div>
+												<button type="button" class="btn btn-danger" data-kt-user-table-select="delete_selected">Delete Selected</button>
 											</div>
+											<!--end::Group actions-->
 
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">Manufracturer (MFG/Mfac/By)</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">Unit</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">Quantity</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class=" form-label fs-6 mb-2">Scheme</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class=" form-label fs-6 mb-2">Batch</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-											<div class="fv-row mb-4">
-												<label class=" form-label fs-6 mb-2">Expiry</label>
-												<input class="form-control form-control-lg form-control-solid" type="date" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">MRP</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">Rate</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class=" form-label fs-6 mb-2">Disc %</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">HSN</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">Gst %</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="med_name" autocomplete="off" value="<?php if(isset($medicine_info->med_name)){echo $medicine_info->med_name;}?>"/>
-
-						                        <div style="color: red;"><?php echo form_error('med_name');?></div>
-											</div>
-
-											<!--begin::Actions-->
-											<div class="text-center pt-15">
-												<button type="submit" name="btn_add_med_cat" class="btn btn-primary" data-kt-users-modal-action="submit">
-													<span class="indicator-label">Submit</span>
-													<span class="indicator-progress">Please wait...
-													<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
-												</button>
-											</div>
-											<!--end::Actions-->
-										</form>
-										<!--end::Form-->
+										</div>
+										<!--end::Card toolbar-->
 									</div>
-								</div>
+									<!--end::Card header-->
+									<!--begin::Card body-->
+									<div class="card-body py-4">
+										<!--begin::Table-->
+										<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
+											<!--begin::Table head-->
+											<thead>
+												<!--begin::Table row-->
+												<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
+													<th class="min-w-50px">
+														Sr. No.
+													</th>
+													<th class="min-w-125px">Medicine </th>
+													<th class="min-w-125px">Unit </th>
+													<th class="min-w-125px">MRP </th>
+													<th class="min-w-125px">Rate </th>
+													<th class="min-w-125px">Category </th>
+													<th class="text-end min-w-100px">Actions</th>
+												</tr>
+												<!--end::Table row-->
+											</thead>
+											<!--end::Table head-->
+											<!--begin::Table body-->
+											<tbody class="text-gray-600 fw-bold">
+												<?php
+												if ($medicine_record) {
+													$i=0;
+													foreach ($medicine_record as $key => $value) {
+														$i++;
+														?>
+												<!--begin::Table row-->
+												<tr>
+													<!--begin::Checkbox-->
+													<td>
+														<?php echo $i;?>
+													</td>
+													<!--end::Checkbox-->
+													<!--begin::User=-->
+													<td class="d-flex align-items-center">
+														
+														<!--begin::User details-->
+														<div class="d-flex flex-column">
+															<a class="text-gray-800 text-hover-primary mb-1"><?php echo $value->med_name;?></a>
+															<!-- <span>e.smith@kpmg.com.au</span> -->
+														</div>
+														<!--begin::User details-->
+													</td>
+													<td><?php echo $value->med_unit;?>
+													<td><?php echo $value->med_mrp;?>
+													<td><?php echo $value->med_rate;?>
+													<td><?php echo $value->med_cat_name;?></td>
+													<!--begin::Action=-->
+													<td class="text-end">
+														<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+														<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
+														<span class="svg-icon svg-icon-5 m-0">
+															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+																<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="black" />
+															</svg>
+														</span>
+														<!--end::Svg Icon--></a>
+														<!--begin::Menu-->
+														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
+																		
+															<?php
+															if ($this->admin->check_user_access('update-medicine')) {
+																?>
+															<!--begin::Menu item-->
+															<div class="menu-item px-3">
+																<a href="<?php echo base_url().'medicine/update_medicine/'.$value->med_id;?>" class="menu-link px-3">Edit</a>
+															</div>
+															<!--end::Menu item-->
+																<?php
+															}
+															?>
+															
+															<!--begin::Menu item-->
+															<!-- <div class="menu-item px-3">
+																<a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
+															</div> -->
+															<!--end::Menu item-->
+														</div>
+														<!--end::Menu-->
+													</td>
+													<!--end::Action=-->
+												</tr>
 
+														<?php
+													}
+												}
+												?>
+												<!--end::Table row-->
+
+											</tbody>
+											<!--end::Table body-->
+										</table>
+										<!--end::Table-->
+									</div>
+									<!--end::Card body-->
+								</div>
+								<!--end::Card-->
 							</div>
+							<!--end::Container-->
 						</div>
+						<!--end::Post-->
 					</div>
 					<!--end::Content-->
 
@@ -300,27 +355,8 @@
 		<script src="<?php echo base_url();?>/assets/js/custom/utilities/modals/users-search.js"></script>
 		<!--end::Page Custom Javascript-->
 		<!--end::Javascript-->
-		
 		<script type="text/javascript">
-
-			/*functionval_take();
-
-			$(".employee_type_click").click(function() {
-				
-				functionval_take();
-
-			});
-
-			function functionval_take() {
-				
-				if ($('input[name="employee_type"]:checked').val()==1) {
-					$(".permanant_field").show();
-				}else{
-					$(".permanant_field").hide();
-				}
-
-			}*/
-
+			 //$('#kt_table_users').DataTable().ajax.reload(); 
 		</script>
 	</body>
 	<!--end::Body-->
