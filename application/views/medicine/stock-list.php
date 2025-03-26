@@ -172,10 +172,10 @@
 
 												&nbsp;
 												<?php
-												if ($this->admin->check_user_access('add-customer')) {
+												if ($this->admin->check_user_access('add-medicine-category')) {
 													?>
 												<!--begin::Add user-->
-												<a href="<?php echo base_url().'customer/add_customer';?>" class="btn btn-primary">
+												<a href="<?php echo base_url().'medicine/add_stock';?>" class="btn btn-primary">
 												<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
 												<span class="svg-icon svg-icon-2">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -211,16 +211,21 @@
 											<thead>
 												<!--begin::Table row-->
 												<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-													<th class="min-w-50px">
+													<!-- <th class="min-w-50px">
 														Sr. No.
-													</th>
-													<th class="min-w-125px">Customer Name</th>
-													<th class="min-w-125px"><!-- Post --></th>
-													<!-- <th class="min-w-125px">User Name</th> -->
-													<th class="min-w-125px">Phone Number</th>
-													<!-- <th class="min-w-50px">OTP</th> -->
-													<th class="min-w-50px"><!-- Worker --></th>
-													<th class="min-w-40px">Blood Group</th>
+													</th> -->
+													<th class="min-w-125px">Bill Number </th>
+													<th class="min-w-125px">MedicineName </th>
+													<th class="min-w-125px">Unit </th>
+													<th class="min-w-125px">QTY </th>
+													<th class="min-w-125px">Scheme </th>
+													<th class="min-w-125px">Batch </th>
+													<th class="min-w-125px">MRP </th>
+													<th class="min-w-125px">Rate </th>
+													<th class="min-w-125px">GST%</th>
+													<th class="min-w-125px">Category </th>
+													<th class="min-w-125px">GST Amount </th>
+													<th class="min-w-125px">Amount </th>
 													<th class="text-end min-w-100px">Actions</th>
 												</tr>
 												<!--end::Table row-->
@@ -229,116 +234,75 @@
 											<!--begin::Table body-->
 											<tbody class="text-gray-600 fw-bold">
 												<?php
-												if ($user_record) {
+												$total_gst=0;
+												$total_amount=0;
+
+												$total_net=0;
+												$scheme_cal=0;
+												
+
+												if ($medicine_record) {
 													$i=0;
-													foreach ($user_record as $key => $value) {
+													foreach ($medicine_record as $key => $value) {
 														$i++;
 														?>
 												<!--begin::Table row-->
 												<tr>
 													<!--begin::Checkbox-->
-													<td>
+													<!-- <td>
 														<?php echo $i;?>
-													</td>
+													</td> -->
 													<!--end::Checkbox-->
 													<!--begin::User=-->
-													<td class="d-flex align-items-center">
-														
-														<!--begin::User details-->
-														<div class="d-flex flex-column">
-															<a class="text-gray-800 text-hover-primary mb-1"><?php echo $value->user_first_name.' '.$value->user_last_name;?></a>
-															<!-- <span>e.smith@kpmg.com.au</span> -->
-														</div>
-														<!--begin::User details-->
+													<td>
+														<?php echo $value->stock_bill_number;?>
 													</td>
-													<!--end::User=-->
-													<!--begin::Role=-->
-													<td><?php //echo $value->emp_type_name;?></td>
-													<!--end::Role=-->
-													<!--begin::Two step=-->
-													<!-- <td><?php echo $value->user_name;?></td> -->
-													<!--end::Two step=-->
-													<!--begin::Last login=-->
-													<!-- <td>
-														<?php echo $value->user_employee_id;?>
-													</td> -->
-													<!--end::Last login=-->
-													<!--begin::Joined-->
-													<td><?php echo $value->user_phone_number;?></td>
-													<!-- <td><?php echo $value->user_otp;?></td> -->
-													<td><!-- <?php 
-													$employee_type_se=array(
-														'0'=>'Confirmed',
-														'1'=>'Treated',
-														'1'=>'Cancelled',
-													);
-													echo $employee_type_se[$value->employee_type];?> --></td>
-													<td><?php 
-													/*if($value->user_status==1){
-														?>
-														<div class="badge badge-light-success fw-bolder">Enabled</div>
-														<?php
-													}else{
-														?>
-														<div class="badge badge-light-danger fw-bolder">Disabled</div>
-														<?php
-													}*/
-													echo $value->user_blood_group;
-													//echo $value->user_full_name;
+													<td>
+														<?php echo $value->stock_product_name;?>
+													</td>
+													<td><?php echo $value->stock_unit;?></td>
+													<td><?php echo $value->stock_qty;?></td>
+													<td><?php echo $value->stock_sch;?></td>
+													<td><?php echo $value->stock_batch;?></td>
+													<td><?php echo $value->stock_mrp;
+													$total_net+=$value->stock_mrp*$value->stock_qty;
+													$scheme_cal+=$value->stock_mrp*$value->stock_sch
 													?></td>
-													<!--begin::Joined-->
+													<td><?php echo $value->stock_rate;?></td>
+													<td><?php echo $value->stock_gst;?>%</td>
+													<td><?php echo $value->med_cat_name;?></td>
+													<td><?php echo round((($value->stock_rate*$value->stock_qty)*$value->stock_gst)/100,2);
+													$total_gst+=round((($value->stock_rate*$value->stock_qty)*$value->stock_gst)/100,2);
+													?></td>
+													<td><?php echo round($value->stock_rate*$value->stock_qty,2);
+													$total_amount+=round($value->stock_rate*$value->stock_qty,2);
+													?></td>
+
 													<!--begin::Action=-->
 													<td class="text-end">
-													<!--<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-														
+														<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+														<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
 														<span class="svg-icon svg-icon-5 m-0">
 															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
 																<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="black" />
 															</svg>
 														</span>
-														</a>-->
-
-														<a href="<?php echo base_url().'customer/update_customer/'.$value->user_id?>" class="btn btn-edit btn-active-edit-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Action</a>
-
-														<!-- <a href="<?php echo base_url().'patient/patient_history/'.$value->user_id?>" class="btn btn-history btn-active-history-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">History</a> -->
-
-
+														<!--end::Svg Icon--></a>
 														<!--begin::Menu-->
 														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
 																		
 															<?php
-															if ($this->admin->check_user_access('update-customer')) {
+															if ($this->admin->check_user_access('update-medicine')) {
 																?>
 															<!--begin::Menu item-->
 															<div class="menu-item px-3">
-																<a href="<?php echo base_url().'customer/update_customer/'.$value->user_id?>" class="menu-link px-3">Edit</a>
+																<a href="<?php echo base_url().'medicine/update_stock/'.$value->stock_id;?>" class="menu-link px-3">Edit</a>
 															</div>
-																<?php
-															}
-															?>
-
-
-															<?php
-															if ($this->admin->check_user_access('treatment-list')) {
-																?>
-															<!-- <div class="menu-item px-3">
-																<a href="<?php echo base_url().'patient/treatment/'.$value->user_id?>" class="menu-link px-3">Treatment</a>
-															</div> -->
 															<!--end::Menu item-->
 																<?php
 															}
 															?>
-
-
-															<?php
-															if ($this->admin->check_user_access('patient-history-list')) {
-																?>
-															<!-- <div class="menu-item px-3">
-																<a href="<?php echo base_url().'patient/patient_history/'.$value->user_id?>" class="menu-link px-3">History</a>
-															</div> -->
-																<?php
-															}
-															?>															
+															
 															<!--begin::Menu item-->
 															<!-- <div class="menu-item px-3">
 																<a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
@@ -353,7 +317,38 @@
 														<?php
 													}
 												}
+
+
 												?>
+
+
+												<!--begin::Table row-->
+												<tr>
+													<!--begin::Checkbox-->
+													<td>
+														
+													</td>
+													<td>Total Amount <br> Rs. <?php echo round($total_amount,2);?></td>
+													<td>
+														Total GST <br> Rs. <?php echo round($total_gst,2);?>
+													</td>
+													<td>Total NET <br> Rs. <?php echo round($total_amount+$total_gst,2);?></td>
+													<td>MRP <br> Rs. <?php echo round($total_net,2);?></td>
+													<td>W/O RateGST<br> Rs. <?php echo round($total_net-($total_amount+$total_gst),2);?></td>
+													<td>Scheme Profit  <br> Rs. <?php echo round($scheme_cal,2);?></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+													<td></td>
+
+													<!--begin::Action=-->
+													<td class="text-end">
+														
+													</td>
+													<!--end::Action=-->
+												</tr>
+
 												<!--end::Table row-->
 
 											</tbody>

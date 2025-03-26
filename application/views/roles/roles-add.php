@@ -225,32 +225,32 @@
 
 													<tr>
 														
-														<td><label class=" form-label fs-6 mb-2">2. Patient</label></td>
+														<td><label class=" form-label fs-6 mb-2">2. Customer</label></td>
 														<td>
-									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="main-patient-list" <?php if(isset($user_access)){if (in_array('main-patient-list', $user_access)) {
+									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="main-customer-list" <?php if(isset($user_access)){if (in_array('main-customer-list', $user_access)) {
 									                          echo "checked";
 									                        }}?>>
-									                        <label class="form-check-label" for="exampleCheck1">Patient List</label>
+									                        <label class="form-check-label" for="exampleCheck1">Customer List</label>
 									                    </td>
 									                </tr>
 													<tr>
 														
 														<td><label class=" form-label fs-6 mb-2"></label></td>
 														<td>
-									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="patient-list" <?php if(isset($user_access)){if (in_array('patient-list', $user_access)) {
+									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="customer-list" <?php if(isset($user_access)){if (in_array('customer-list', $user_access)) {
 									                          echo "checked";
 									                        }}?>>
-									                        <label class="form-check-label" for="exampleCheck1">Patient List</label>
+									                        <label class="form-check-label" for="exampleCheck1">Customer List</label>
 
-									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="add-patient" <?php if(isset($user_access)){if (in_array('add-patient', $user_access)) {
+									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="add-customer" <?php if(isset($user_access)){if (in_array('add-customer', $user_access)) {
 									                          echo "checked";
 									                        }}?>>
-									                        <label class="form-check-label" for="exampleCheck1">Add Patient</label>
+									                        <label class="form-check-label" for="exampleCheck1">Add Customer</label>
 
-									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="update-patient" <?php if(isset($user_access)){if (in_array('update-patient', $user_access)) {
+									                        <input type="checkbox" class="form-check-input select_all" name="user_access[]" value="update-customer" <?php if(isset($user_access)){if (in_array('update-customer', $user_access)) {
 									                          echo "checked";
 									                        }}?>>
-									                        <label class="form-check-label" for="exampleCheck1">Update Patient</label>
+									                        <label class="form-check-label" for="exampleCheck1">Update Customer</label>
 									                        
 									                    </td>
 													</tr>

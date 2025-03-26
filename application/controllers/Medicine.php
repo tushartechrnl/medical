@@ -48,6 +48,28 @@ class Medicine extends CI_Controller {
 
 	}
 
+	public function stock_list()
+	{
+
+		if (!$this->admin->check_user_access('medicine-list')) {
+			redirect(base_url().'dashboard');
+		}
+
+        $where=array(
+    				);
+        if (isset($_GET['bill_number'])) {
+        	$where['stock_bill_number']=$_GET['bill_number'];
+        }
+        $this->db->order_by('stock_id','DESC');
+        $this->db->join('tbl_medicine_category','tbl_medicine_category.med_cat_id=tbl_stock.stock_category_id');
+        $this->data['medicine_record'] = $this->admin->record_list('tbl_stock',$where);
+        
+		$this->data['page_title'] = "Stock";
+
+		$this->load->view('medicine/stock-list',$this->data);
+
+	}
+
 
 	public function add_agency_bill()
 	{
@@ -279,6 +301,148 @@ class Medicine extends CI_Controller {
 	}
 
 
+	public function add_stock()
+	{
+
+		if (!$this->admin->check_user_access('add-medicine')) {
+			redirect(base_url().'dashboard');
+		}
+
+		$this->data['page_title'] = "Add Stock";
+
+		if (isset($_POST['btn_add_med_stock'])) {
+			
+			//$this->form_validation->set_rules('med_cat_id','ID','required|xss_clean');
+					
+			$this->form_validation->set_rules('stock_product_name','Name','required|xss_clean');
+			
+			$this->form_validation->set_rules('stock_qty','Name','required|xss_clean');
+			
+			$this->form_validation->set_rules('stock_mrp','MRP','required|xss_clean');
+			
+			$this->form_validation->set_rules('stock_rate','Rate','required|xss_clean');
+			
+			
+        	if($this->form_validation->run()){
+
+        		
+	 			$data=array(
+	        		'stock_bill_number'=>$this->input->post('stock_bill_number'),
+	        		'stock_category_id'=>$this->input->post('stock_category_id'),
+	        		'stock_product_name'=>strtoupper($this->input->post('stock_product_name')),
+	        		'stock_unit'=>$this->input->post('stock_unit'),
+	        		'stock_qty'=>$this->input->post('stock_qty'),
+	        		'stock_sch'=>$this->input->post('stock_sch'),
+	        		'stock_batch'=>$this->input->post('stock_batch'),
+	        		'stock_mrp'=>$this->input->post('stock_mrp'),
+	        		'stock_rate'=>$this->input->post('stock_rate'),
+	        		'stock_gst'=>$this->input->post('stock_gst'),
+		        );
+
+		        $this->admin->record_insert('tbl_stock',$data);
+
+				$this->session->set_flashdata('success_message',"Stock has been created successfully");
+
+				//redirect($_SERVER['HTTP_REFERER']);
+				redirect(base_url().'medicine/stock_list');
+        	}
+
+		}
+
+        
+
+        $where=array(
+		            	//'user_employee_type'=>'2',
+    				);
+        $this->data['medicine_category_list'] = $this->admin->record_list('tbl_medicine_category',$where);
+
+        $where=array(
+    				);
+        $this->db->order_by('stock_id','DESC');
+        $this->db->join('tbl_medicine_category','tbl_medicine_category.med_cat_id=tbl_stock.stock_category_id');
+        $this->data['medicine_record'] = $this->admin->record_list('tbl_stock',$where);
+        
+		$this->load->view('medicine/add-stock',$this->data);
+	}
+
+	public function update_stock()
+	{
+
+		if (!$this->admin->check_user_access('update-medicine')) {
+			redirect(base_url().'dashboard');
+		}
+
+		$this->data['page_title'] = "Update Stock";
+
+		if (isset($_POST['btn_add_med_stock'])) {
+			
+			$this->form_validation->set_rules('stock_product_name','Name','required|xss_clean');
+			
+			$this->form_validation->set_rules('stock_qty','Name','required|xss_clean');
+			
+			$this->form_validation->set_rules('stock_mrp','MRP','required|xss_clean');
+			
+			$this->form_validation->set_rules('stock_rate','Rate','required|xss_clean');
+			
+			
+        	if($this->form_validation->run()){
+
+        		//unset($_POST['btn_add_med_cat']);
+		        //$data=$_POST;
+		        
+	 			$where=array(
+	        		'stock_id'=>$this->input->post('stock_id'),
+		        );
+
+	 			$data=array(
+	        		'stock_bill_number'=>$this->input->post('stock_bill_number'),
+	        		'stock_category_id'=>$this->input->post('stock_category_id'),
+	        		'stock_product_name'=>strtoupper($this->input->post('stock_product_name')),
+	        		'stock_unit'=>$this->input->post('stock_unit'),
+	        		'stock_qty'=>$this->input->post('stock_qty'),
+	        		'stock_sch'=>$this->input->post('stock_sch'),
+	        		'stock_batch'=>$this->input->post('stock_batch'),
+	        		'stock_mrp'=>$this->input->post('stock_mrp'),
+	        		'stock_rate'=>$this->input->post('stock_rate'),
+	        		'stock_gst'=>$this->input->post('stock_gst'),
+		        );
+		        $this->admin->records_update('tbl_stock',$data,$where);
+
+				$this->session->set_flashdata('success_message',"Stock has been Updated successfully");
+
+				//redirect($_SERVER['HTTP_REFERER']);
+
+				redirect(base_url().'medicine/stock_list');
+        	}
+
+		}
+
+        /*$where=array(
+		            	'user_employee_type'=>'2',
+    				);
+        $this->data['doctor_list'] = $this->admin->record_list('tbl_user',$where);*/
+
+
+        $where=array(
+        			'stock_id'=>$this->uri->segment('3')
+    				);
+     	$medicine_info= $this->admin->record_list('tbl_stock',$where);
+		
+		$this->data['medicine_info']=$medicine_info[0];
+		
+		if (!$this->data['medicine_info']) {
+			redirect(base_url('medicine/stock'));
+		}
+
+        $where=array(
+		            	//'user_employee_type'=>'2',
+    				);
+        $this->data['medicine_category_list'] = $this->admin->record_list('tbl_medicine_category',$where);
+
+		$this->load->view('medicine/add-stock',$this->data);
+	}
+
+
 	public function category()
 	{
 
@@ -413,7 +577,7 @@ class Medicine extends CI_Controller {
         $this->db->order_by('agency_id','DESC');
         $this->data['medicine_record'] = $this->admin->record_list('tbl_med_agency',$where);
         
-		$this->data['page_title'] = "Medical Agency";
+		$this->data['page_title'] = "Agency";
 
 		$this->load->view('medicine/medicine-agency-list',$this->data);
 
@@ -427,7 +591,7 @@ class Medicine extends CI_Controller {
 			redirect(base_url().'dashboard');
 		}
 
-		$this->data['page_title'] = "Add Medicine Agency";
+		$this->data['page_title'] = "Add Agency";
 
 		if (isset($_POST['btn_add_med_cat'])) {
 			
@@ -445,7 +609,7 @@ class Medicine extends CI_Controller {
 		        );
 		        $this->admin->record_insert('tbl_med_agency',$data);
 
-				$this->session->set_flashdata('success_message',"Medicine agency has been created successfully");
+				$this->session->set_flashdata('success_message',"Agency has been created successfully");
 
 				//redirect($_SERVER['HTTP_REFERER']);
 				redirect(base_url().'medicine/agency_list');
@@ -470,7 +634,7 @@ class Medicine extends CI_Controller {
 			redirect(base_url().'dashboard');
 		}
 
-		$this->data['page_title'] = "Update Medicine Category";
+		$this->data['page_title'] = "Update Agency";
 
 		if (isset($_POST['btn_add_med_cat'])) {
 			

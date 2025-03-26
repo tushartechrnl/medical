@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Patient extends CI_Controller {
+class Customer extends CI_Controller {
 
 	public function __construct()
 	{
@@ -14,8 +14,8 @@ class Patient extends CI_Controller {
 
 	public function index()
 	{
-
-		if (!$this->admin->check_user_access('patient-list')) {
+		
+		if (!$this->admin->check_user_access('customer-list')) {
 			redirect(base_url().'dashboard');
 		}
 
@@ -31,7 +31,7 @@ class Patient extends CI_Controller {
         $this->db->join('tbl_employee_type','tbl_employee_type.emp_type_id=tbl_user.user_employee_type');
         $this->data['user_record'] = $this->admin->record_list('tbl_user',$where);
         
-		$this->data['page_title'] = "Patient";
+		$this->data['page_title'] = "Customer";
 
 		$this->load->view('patient/user-list',$this->data);
 
@@ -1430,14 +1430,14 @@ class Patient extends CI_Controller {
 		$this->load->view('user_vehical/vehical-add',$this->data);
 	}
 
-	public function add_patient()
+	public function add_customer()
 	{
 
-		if (!$this->admin->check_user_access('add-patient')) {
+		if (!$this->admin->check_user_access('add-customer')) {
 			redirect(base_url().'dashboard');
 		}
 
-		$this->data['page_title'] = "Add Patient";
+		$this->data['page_title'] = "Add Customer";
 
 		if (isset($_POST['btn_add_user'])) {
 			// echo "<pre>";
@@ -1476,7 +1476,7 @@ class Patient extends CI_Controller {
 
 				$this->session->set_flashdata('success_message',"Your account has been created successfully");
 
-				redirect(base_url().'patient');
+				redirect(base_url().'customer');
         	}
 
 		}
@@ -1492,14 +1492,14 @@ class Patient extends CI_Controller {
 		$this->load->view('patient/user-update',$this->data);
 	}
 
-	public function update_patient()
+	public function update_customer()
 	{
 
-		if (!$this->admin->check_user_access('update-patient')) {
+		if (!$this->admin->check_user_access('update-customer')) {
 			redirect(base_url().'dashboard');
 		}
 
-		$this->data['page_title'] = "Update Patient";
+		$this->data['page_title'] = "Update customer";
 
 		if (isset($_POST['btn_add_user'])) {
 			
@@ -1541,7 +1541,7 @@ class Patient extends CI_Controller {
 
 				$this->session->set_flashdata('success_message',"Employee information has been Updated successfully");
 
-				redirect(base_url().'patient');
+				redirect(base_url().'customer');
         	}
 
 		}
