@@ -138,8 +138,91 @@
 						                         }
 						                ?>
 
+										<div class="card-title">
+											<div class="card-body p-12">
+
+												<!--begin::Form-->
+												<form id="kt_modal_update_password_form" class="form" method="post" >
+
+													<!--begin::Input group-->
+													<div class="row mb-12">
+														<!--begin::Col-->
+														<div class="col-md-12 fv-row">
+															<!--begin::Label-->
+															<label class="required fs-12 fw-bold mb-2">Product Name</label>
+
+															<select name="cart_stock_id" aria-label="Select Product" data-control="select2" data-placeholder="Select Product..." class="form-select form-select-solid form-select-lg">
+
+																<option value="">Select Product...</option>
+																
+																<?php
+																	foreach ($medicine_record as $key2 => $value2) {
+																		$stock_unit="";
+
+																		if($value2->stock_unit)$stock_unit=$value2->stock_unit;
+																		?>
+																			<option data-kt-flag="flags/indonesia.svg"
+																			<?php
+																			?>
+																			 value="<?php echo $value2->stock_id;?>"><?php echo $value2->stock_product_name.' '.$stock_unit.' '.$value2->stock_uom.' '.$value2->stock_batch;?></option>
+																		<?php
+																	}
+																?>
+																
+															</select>
+
+															<div style="color: red;"><?php echo form_error('cart_stock_id'); ?></div>
+															<!--end::Input-->
+														</div>
+														<!--end::Col-->
+													</div>
+													<!--end::Input group-->
+
+											<div class="fv-row mb-4">
+												<label class="required form-label fs-6 mb-2">IS Cutting</label>
+											
+												<!--begin::Input-->
+												<input class="form-check-input me-3" name="is_cutting" type="radio" value="0" id="kt_modal_update_role_option_0" checked="checked">
+												<!--end::Input-->
+												<!--begin::Label-->
+												<label class="form-check-label" for="kt_modal_update_role_option_0">
+													<div class="fw-bolder text-gray-800">No</div>
+												</label>
+												<!--end::Label-->
+
+												<!--begin::Input-->
+												<input class="form-check-input me-3" name="is_cutting" type="radio" value="0" id="kt_modal_update_role_option_0" >
+												<!--end::Input-->
+												<!--begin::Label-->
+												<label class="form-check-label" for="kt_modal_update_role_option_0">
+													<div class="fw-bolder text-gray-800">Yes</div>
+												</label>
+												<!--end::Label-->
+												<br>
+												<label class="required form-label fs-6 mb-2">Quantity</label>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="cart_qty" autocomplete="off" value="1"/>
+
+						                        <div style="color: red;"><?php echo form_error('cart_qty');?></div>
+											</div>
+
+													<!--begin::Actions-->
+													<div class="row mb-5">
+														<button type="submit" name="btn_submit_to_cart" class="btn btn-primary" data-kt-users-modal-action="submit">
+															<span class="indicator-label">ADD</span>
+															<span class="indicator-progress">Please wait...
+															<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+														</button>
+													</div>
+													<!--end::Actions-->
+												</form>
+												<!--end::Form-->
+											</div>
+										</div>
+
 										<!--begin::Card title-->
 										<div class="card-title">
+
+
 											<!--begin::Search-->
 											<div class="d-flex align-items-center position-relative my-1">
 												<!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
@@ -170,25 +253,6 @@
 													</svg>
 												</span>Export User</a> -->
 
-												&nbsp;
-												<?php
-												if ($this->admin->check_user_access('add-medicine-category')) {
-													?>
-												<!--begin::Add user-->
-												<a href="<?php echo base_url().'medicine/add_stock';?>" class="btn btn-primary">
-												<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
-												<span class="svg-icon svg-icon-2">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-														<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-														<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-													</svg>
-												</span>
-												<!--end::Svg Icon-->Add <?php echo $page_title;?></a>
-												<!--end::Add user-->
-
-													<?php
-												}
-												?>
 											</div>
 											<!--end::Toolbar-->
 											<!--begin::Group actions-->
@@ -211,30 +275,22 @@
 											<thead>
 												<!--begin::Table row-->
 												<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
-													<!-- <th class="min-w-50px">
-														Sr. No.
-													</th> -->
-													<th class="min-w-125px">Bill Number </th>
-													<th class="min-w-125px">MedicineName </th>
+
+													<th class="min-w-125px">Sr. No. </th>
+													<th class="min-w-125px">Product Name </th>
 													<th class="min-w-125px">Unit </th>
 													<th class="min-w-125px">UOM </th>
-													<th class="min-w-125px">QTY </th>
-													<th class="min-w-125px">Scheme </th>
 													<th class="min-w-125px">Batch </th>
 													<th class="min-w-125px">Expiry </th>
-													<th class="min-w-125px">MRP </th>
-													<th class="min-w-125px">Rate </th>
-													<th class="min-w-125px">Disc%</th>
-													<th class="min-w-125px">GST%</th>
-													<th class="min-w-125px">Category </th>
-													<th class="min-w-125px">GST Amount </th>
+													<th class="min-w-125px">Is Cutting </th>
+													<th class="min-w-125px">Qty </th>
 													<th class="min-w-125px">Amount </th>
 													<th class="text-end min-w-100px">Actions</th>
+
 												</tr>
-												<!--end::Table row-->
+
 											</thead>
-											<!--end::Table head-->
-											<!--begin::Table body-->
+
 											<tbody class="text-gray-600 fw-bold">
 												<?php
 												$total_gst=0;
@@ -245,22 +301,13 @@
 												$scheme_cal=0;
 												
 
-												if ($medicine_record) {
+												if ($this->session->userdata('billing_record')) {
 													$i=0;
 													foreach ($medicine_record as $key => $value) {
 														$i++;
 														?>
-												<!--begin::Table row-->
+
 												<tr>
-													<!--begin::Checkbox-->
-													<!-- <td>
-														<?php echo $i;?>
-													</td> -->
-													<!--end::Checkbox-->
-													<!--begin::User=-->
-													<td>
-														<a href="<?php echo base_url().'medicine/stock_list?bill_number='.$value->stock_bill_number;?>"><?php echo $value->stock_bill_number;?></a>
-													</td>
 													<td>
 														<?php echo $value->stock_product_name;?>
 													</td>
@@ -269,59 +316,9 @@
 													<td><?php echo $value->stock_qty;?></td>
 													<td><?php echo $value->stock_sch;?></td>
 													<td><?php echo $value->stock_batch;?></td>
-													<td><?php if($value->stock_expiry_date)echo date("m-Y",strtotime($value->stock_expiry_date));?></td>
-													<td><?php echo $value->stock_mrp;
-													$total_net+=$value->stock_mrp*$value->stock_qty;
-													$scheme_cal+=$value->stock_mrp*$value->stock_sch
-													?></td>
-													<td><?php echo $value->stock_rate;?></td>
-													<td><?php echo $value->stock_discount_percent;
-
-													$total_discount+=round((($value->stock_rate*$value->stock_qty)*$value->stock_discount_percent)/100,2);
-													?>%</td>
-													<td><?php echo $value->stock_gst;?>%</td>
-													<td><?php echo $value->med_cat_name;?></td>
-													<td><?php echo round((($value->stock_rate*$value->stock_qty)*$value->stock_gst)/100,2);
-													$total_gst+=round((($value->stock_rate*$value->stock_qty)*$value->stock_gst)/100,2);
-													?></td>
-													<td><?php echo round($value->stock_rate*$value->stock_qty,2);
-													$total_amount+=round($value->stock_rate*$value->stock_qty,2);
-													?></td>
-
-													<!--begin::Action=-->
-													<td class="text-end">
-														<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-														<!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
-														<span class="svg-icon svg-icon-5 m-0">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="black" />
-															</svg>
-														</span>
-														<!--end::Svg Icon--></a>
-														<!--begin::Menu-->
-														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-																		
-															<?php
-															if ($this->admin->check_user_access('update-medicine')) {
-																?>
-															<!--begin::Menu item-->
-															<div class="menu-item px-3">
-																<a href="<?php echo base_url().'medicine/update_stock/'.$value->stock_id;?>" class="menu-link px-3">Edit</a>
-															</div>
-															<!--end::Menu item-->
-																<?php
-															}
-															?>
-															
-															<!--begin::Menu item-->
-															<!-- <div class="menu-item px-3">
-																<a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
-															</div> -->
-															<!--end::Menu item-->
-														</div>
-														<!--end::Menu-->
-													</td>
-													<!--end::Action=-->
+													<td><?php ?></td>
+													<td><?php ?></td>
+													<td><?php ?></td>
 												</tr>
 
 														<?php
@@ -331,38 +328,6 @@
 
 												?>
 
-
-												<!--begin::Table row-->
-												<tr>
-													<!--begin::Checkbox-->
-													<td>Total Amount <br> Rs. <?php echo round($total_amount,2);?></td>
-													<td>Total Discount <br><?php echo round($total_discount,2);?></td>
-													<td>
-														Total GST <br> Rs. <?php echo round($total_gst,2);?>
-													</td>
-													<td>Total NET <br> Rs. <?php echo round($total_amount+$total_gst-$total_discount,2);?></td>
-													<td>MRP <br> Rs. <?php echo round($total_net,2);?></td>
-													<td>W/O RateGST<br> Rs. <?php echo round($total_net-($total_amount+$total_gst)+$total_discount,2);?></td>
-													<td>Scheme Profit  <br> Rs. <?php echo round($scheme_cal,2);?></td>
-													<td>
-														
-													</td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-													<td></td>
-
-													<!--begin::Action=-->
-													<td class="text-end">
-														
-													</td>
-													<!--end::Action=-->
-												</tr>
-
-												<!--end::Table row-->
 
 											</tbody>
 											<!--end::Table body-->
@@ -376,6 +341,120 @@
 							<!--end::Container-->
 						</div>
 						<!--end::Post-->
+
+
+
+						<div class="post d-flex flex-column-fluid" id="kt_post">
+							<!--begin::Container-->
+							<div id="kt_content_container" class="container-xxl">
+
+								<div class="card mb-5 mb-xl-10" id="kt_profile_details_view">
+									
+									<!--begin::Card body-->
+									<div class="card-body p-9">
+
+						                    
+										<!--begin::Form-->
+										<form id="kt_modal_update_password_form" class="form" method="post" >
+
+											<div class="fv-row mb-4">
+												<label class=" form-label fs-6 mb-2">Total Amount : 0 Rs.</label>
+												<input class="form-control form-control-lg form-control-solid" type="hidden" placeholder="" name="stock_bill_number" autocomplete="off" value=""/>
+
+						                        <div style="color: red;"><?php echo form_error('stock_bill_number');?></div>
+											</div>
+
+											<div class="fv-row mb-4">
+												<label class=" form-label fs-6 mb-2">Discount</label>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_bill_number" autocomplete="off" value=""/>
+
+						                        <div style="color: red;"><?php echo form_error('stock_bill_number');?></div>
+											</div>
+
+											<div class="fv-row mb-4">
+												<label class=" form-label fs-6 mb-2">Net Amount</label>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_bill_number" autocomplete="off" value=""/>
+
+						                        <div style="color: red;"><?php echo form_error('stock_bill_number');?></div>
+											</div>
+
+
+											<div class="d-flex flex-column mb-7 fv-row">
+												<!--begin::Label-->
+												<label class="fs-6 fw-bold mb-2">
+													<span class="">Doctor</span>
+													
+												</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<select name="doctor_id" aria-label="Select Employee Post" data-control="select2" data-placeholder="Select Doctor..." class="form-select form-select-solid form-select-lg">
+													<option value="">Select Doctor...</option>
+													
+													<?php
+														foreach ($doctor_record as $key2 => $value2) {
+															?>
+																<option data-kt-flag="flags/indonesia.svg"
+																
+																 value="<?php echo $value2->user_id;?>"><?php echo $value2->user_first_name.' '.$value2->user_last_name;?></option>
+															<?php
+														}
+													?>
+													
+												</select>
+												<!--end::Input-->
+
+						                        <div style="color: red;"><?php echo form_error('doctor_id');?></div>
+											</div>
+											<!--end::Input group-->
+
+
+											<div class="d-flex flex-column mb-7 fv-row">
+												<!--begin::Label-->
+												<label class="fs-6 fw-bold mb-2">
+													<span class="">Patient</span>
+													
+												</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<select name="patient_id" aria-label="Select Employee Post" data-control="select2" data-placeholder="Select Patient..." class="form-select form-select-solid form-select-lg">
+													<option value="">Select Patient...</option>
+													
+													<?php
+														foreach ($patient_record as $key2 => $value2) {
+															?>
+																<option data-kt-flag="flags/indonesia.svg"
+																
+																 value="<?php echo $value2->user_id;?>"><?php echo $value2->user_first_name.' '.$value2->user_last_name;?></option>
+															<?php
+														}
+													?>
+													
+												</select>
+													
+												</select>
+												<!--end::Input-->
+
+						                        <div style="color: red;"><?php echo form_error('user_employee_type');?></div>
+											</div>
+											<!--end::Input group-->
+
+											<!--begin::Actions-->
+											<div class="text-center pt-15">
+												<button type="submit" name="btn_add_med_stock" class="btn btn-primary" data-kt-users-modal-action="submit">
+													<span class="indicator-label">Submit</span>
+													<span class="indicator-progress">Please wait...
+													<span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+												</button>
+											</div>
+											<!--end::Actions-->
+										</form>
+										<!--end::Form-->
+									</div>
+								</div>
+
+							</div>
+						</div>
+
 					</div>
 					<!--end::Content-->
 

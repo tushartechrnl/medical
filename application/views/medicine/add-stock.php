@@ -139,6 +139,46 @@
 											<div class="d-flex flex-column mb-7 fv-row">
 												<!--begin::Label-->
 												<label class="fs-6 fw-bold mb-2">
+													<span class="">Agency</span>
+													
+												</label>
+												<!--end::Label-->
+												<!--begin::Input-->
+												<select name="stock_agency_id" aria-label="Select Agency" data-control="select2" data-placeholder="Select Agency..." class="form-select form-select-solid form-select-lg">
+
+													<!-- <option value="">Select Category...</option> -->
+													
+													<?php
+														foreach ($medicine_agency_list as $key2 => $value2) {
+															?>
+																<option data-kt-flag="flags/indonesia.svg"
+																<?php
+																if(isset($medicine_info->stock_agency_id)){
+																	if ($medicine_info->stock_agency_id==$value2->agency_id) {
+																		echo " selected ";
+																	}
+																}else{
+																	if(isset($medicine_record[0]->stock_agency_id)){
+																		if ($medicine_record[0]->stock_agency_id==$value2->agency_id) {
+																			echo " selected ";
+																		}
+																	}
+																}
+																?>
+																 value="<?php echo $value2->agency_id;?>"><?php echo $value2->agency_name;?></option>
+															<?php
+														}
+													?>
+													
+												</select>
+												<!--end::Input-->
+
+						                        <div style="color: red;"><?php echo form_error('stock_agency_id');?></div>
+											</div>
+											
+											<div class="d-flex flex-column mb-7 fv-row">
+												<!--begin::Label-->
+												<label class="fs-6 fw-bold mb-2">
 													<span class="">Medicine Category</span>
 													
 												</label>
@@ -195,6 +235,14 @@
 
 
 											<div class="fv-row mb-4">
+												<label class=" form-label fs-6 mb-2">Unit Of Mesurement</label>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_uom" autocomplete="off" value="<?php if(isset($medicine_info->stock_uom)){echo $medicine_info->stock_uom;}?>"/>
+
+						                        <div style="color: red;"><?php echo form_error('stock_uom');?></div>
+											</div>
+
+
+											<div class="fv-row mb-4">
 												<label class="required form-label fs-6 mb-2">Quantity</label>
 												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_qty" autocomplete="off" value="<?php if(isset($medicine_info->stock_qty)){echo $medicine_info->stock_qty;}?>"/>
 
@@ -216,6 +264,13 @@
 						                        <div style="color: red;"><?php echo form_error('stock_batch');?></div>
 											</div>
 
+											<div class="fv-row mb-4">
+												<label class=" form-label fs-6 mb-2">Expiry Date</label>
+												<input class="form-control form-control-lg form-control-solid" type="date" placeholder="" name="stock_expiry_date" autocomplete="off" value="<?php if(isset($medicine_info->stock_expiry_date)){echo $medicine_info->stock_expiry_date;}else{}?>"/>
+
+						                        <div style="color: red;"><?php echo form_error('stock_expiry_date');?></div>
+											</div>
+
 
 
 
@@ -231,6 +286,20 @@
 												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_rate" autocomplete="off" value="<?php if(isset($medicine_info->stock_rate)){echo $medicine_info->stock_rate;}?>"/>
 
 						                        <div style="color: red;"><?php echo form_error('stock_rate');?></div>
+											</div>
+
+											<div class="fv-row mb-4">
+												<label class=" form-label fs-6 mb-2">Discount %</label>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_discount_percent" autocomplete="off" value="<?php 
+												if(isset($medicine_info->stock_discount_percent)){
+													echo $medicine_info->stock_discount_percent;
+												}else{
+													if(isset($medicine_record[0]->stock_discount_percent)){
+														echo $medicine_record[0]->stock_discount_percent;
+													}
+												}?>"/>
+
+						                        <div style="color: red;"><?php echo form_error('stock_discount_percent');?></div>
 											</div>
 
 											<div class="fv-row mb-4">

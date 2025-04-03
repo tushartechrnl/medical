@@ -48,6 +48,53 @@ class Medicine extends CI_Controller {
 
 	}
 
+
+	public function billing()
+	{
+
+		if (!$this->admin->check_user_access('medicine-list')) {
+			redirect(base_url().'dashboard');
+		}
+
+        $where=array(
+	        			'is_stock_out'=>0,
+    				);
+        $this->db->order_by('stock_id','DESC');
+        $this->db->join('tbl_medicine_category','tbl_medicine_category.med_cat_id=tbl_stock.stock_category_id');
+        $this->data['medicine_record'] = $this->admin->record_list('tbl_stock',$where);
+        
+        $where=array(
+        			'tbl_user.user_id !='=>'1',
+        			'tbl_user.project_location_id'=>$this->session->userdata('location_id'),
+    				);
+		$report_to = array('3');
+		$this->db->where_in('user_employee_type', $report_to);
+
+        $this->db->order_by('tbl_user.user_id','DESC');
+        $this->db->select('tbl_user.*,tbl_employee_type.emp_type_name');
+        $this->db->join('tbl_employee_type','tbl_employee_type.emp_type_id=tbl_user.user_employee_type');
+        $this->data['patient_record'] = $this->admin->record_list('tbl_user',$where);
+        
+        $where=array(
+        			'tbl_user.user_id !='=>'1',
+        			'tbl_user.project_location_id'=>$this->session->userdata('location_id'),
+    				);
+		$report_to = array('2');
+		$this->db->where_in('user_employee_type', $report_to);
+
+        $this->db->order_by('tbl_user.user_id','DESC');
+        $this->db->select('tbl_user.*,tbl_employee_type.emp_type_name');
+        $this->db->join('tbl_employee_type','tbl_employee_type.emp_type_id=tbl_user.user_employee_type');
+        $this->data['doctor_record'] = $this->admin->record_list('tbl_user',$where);
+        
+		$this->data['page_title'] = "Billing";
+
+		$this->load->view('medicine/billing',$this->data);
+
+	}
+
+
+
 	public function stock_list()
 	{
 
@@ -64,6 +111,19 @@ class Medicine extends CI_Controller {
         $this->db->join('tbl_medicine_category','tbl_medicine_category.med_cat_id=tbl_stock.stock_category_id');
         $this->data['medicine_record'] = $this->admin->record_list('tbl_stock',$where);
         
+        foreach ($this->data['medicine_record'] as $key => $value) {
+
+ 			$data=array(
+        		'stock_total_qty'=>$value->stock_qty+$value->stock_sch,
+	        );
+ 			$where=array(
+        		'stock_id'=>$value->stock_id,
+	        );
+
+	        $this->admin->records_update('tbl_stock',$data,$where);
+    	
+        }
+
 		$this->data['page_title'] = "Stock";
 
 		$this->load->view('medicine/stock-list',$this->data);
@@ -314,6 +374,8 @@ class Medicine extends CI_Controller {
 			
 			//$this->form_validation->set_rules('med_cat_id','ID','required|xss_clean');
 					
+			$this->form_validation->set_rules('stock_agency_id','Agency','required|xss_clean');
+			
 			$this->form_validation->set_rules('stock_product_name','Name','required|xss_clean');
 			
 			$this->form_validation->set_rules('stock_qty','Name','required|xss_clean');
@@ -327,16 +389,24 @@ class Medicine extends CI_Controller {
 
         		
 	 			$data=array(
+	        		'stock_agency_id'=>$this->input->post('stock_agency_id'),
+
 	        		'stock_bill_number'=>$this->input->post('stock_bill_number'),
 	        		'stock_category_id'=>$this->input->post('stock_category_id'),
 	        		'stock_product_name'=>strtoupper($this->input->post('stock_product_name')),
 	        		'stock_unit'=>$this->input->post('stock_unit'),
+	        		'stock_uom'=>$this->input->post('stock_uom'),
+
 	        		'stock_qty'=>$this->input->post('stock_qty'),
 	        		'stock_sch'=>$this->input->post('stock_sch'),
+	        		'stock_total_qty'=>$this->input->post('stock_qty')+$this->input->post('stock_sch'),
 	        		'stock_batch'=>$this->input->post('stock_batch'),
 	        		'stock_mrp'=>$this->input->post('stock_mrp'),
 	        		'stock_rate'=>$this->input->post('stock_rate'),
 	        		'stock_gst'=>$this->input->post('stock_gst'),
+	        		
+	        		'stock_expiry_date'=>$this->input->post('stock_expiry_date'),
+	        		'stock_discount_percent'=>$this->input->post('stock_discount_percent'),
 		        );
 
 		        $this->admin->record_insert('tbl_stock',$data);
@@ -355,6 +425,11 @@ class Medicine extends CI_Controller {
 		            	//'user_employee_type'=>'2',
     				);
         $this->data['medicine_category_list'] = $this->admin->record_list('tbl_medicine_category',$where);
+
+        $where=array(
+		            	'agency_status'=>'1',
+    				);
+        $this->data['medicine_agency_list'] = $this->admin->record_list('tbl_med_agency',$where);
 
         $where=array(
     				);
@@ -376,6 +451,8 @@ class Medicine extends CI_Controller {
 
 		if (isset($_POST['btn_add_med_stock'])) {
 			
+			$this->form_validation->set_rules('stock_agency_id','Agency','required|xss_clean');
+			
 			$this->form_validation->set_rules('stock_product_name','Name','required|xss_clean');
 			
 			$this->form_validation->set_rules('stock_qty','Name','required|xss_clean');
@@ -395,15 +472,22 @@ class Medicine extends CI_Controller {
 		        );
 
 	 			$data=array(
+	        		'stock_agency_id'=>$this->input->post('stock_agency_id'),
+	 				
 	        		'stock_bill_number'=>$this->input->post('stock_bill_number'),
 	        		'stock_category_id'=>$this->input->post('stock_category_id'),
 	        		'stock_product_name'=>strtoupper($this->input->post('stock_product_name')),
 	        		'stock_unit'=>$this->input->post('stock_unit'),
+	        		'stock_uom'=>$this->input->post('stock_uom'),
 	        		'stock_qty'=>$this->input->post('stock_qty'),
 	        		'stock_sch'=>$this->input->post('stock_sch'),
+	        		'stock_total_qty'=>$this->input->post('stock_qty')+$this->input->post('stock_sch'),
 	        		'stock_batch'=>$this->input->post('stock_batch'),
 	        		'stock_mrp'=>$this->input->post('stock_mrp'),
 	        		'stock_rate'=>$this->input->post('stock_rate'),
+
+	        		'stock_expiry_date'=>$this->input->post('stock_expiry_date'),
+	        		'stock_discount_percent'=>$this->input->post('stock_discount_percent'),
 	        		'stock_gst'=>$this->input->post('stock_gst'),
 		        );
 		        $this->admin->records_update('tbl_stock',$data,$where);
@@ -438,6 +522,11 @@ class Medicine extends CI_Controller {
 		            	//'user_employee_type'=>'2',
     				);
         $this->data['medicine_category_list'] = $this->admin->record_list('tbl_medicine_category',$where);
+
+        $where=array(
+		            	//'agency_status'=>'2',
+    				);
+        $this->data['medicine_agency_list'] = $this->admin->record_list('tbl_med_agency',$where);
 
 		$this->load->view('medicine/add-stock',$this->data);
 	}
