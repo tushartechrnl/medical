@@ -57,7 +57,9 @@
 					</div>
 					<!--end::Brand-->
 
-					<?php $this->load->view('side_bar.php'); ?>
+					<?php //include "side_bar.php"; 
+						$this->load->view("side_bar");
+					?>
 
 
 				</div>
@@ -65,9 +67,8 @@
 				<!--begin::Wrapper-->
 				<div class="wrapper d-flex flex-column flex-row-fluid" id="kt_wrapper">
 					<!--header start-->
-
-					<?php $this->load->view('header.php'); ?>
-					<?php //include "header.php"; ?>
+				<?php //include "header.php"; 
+						$this->load->view("header");?>
 				    <!--header end-->
 					
 					<!--begin::Content-->
@@ -79,7 +80,7 @@
 								<!--begin::Page title-->
 								<div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex align-items-center flex-wrap me-3 mb-5 mb-lg-0">
 									<!--begin::Title-->
-									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1"><?php echo $page_title;?></h1>
+									<h1 class="d-flex align-items-center text-dark fw-bolder fs-3 my-1">Billing</h1>
 									<!--end::Title-->
 									<!--begin::Separator-->
 									<span class="h-20px border-gray-300 border-start mx-4"></span>
@@ -172,10 +173,10 @@
 
 												&nbsp;
 												<?php
-												if ($this->admin->check_user_access('add-customer')) {
+												if ($this->admin->check_user_access('add-user')) {
 													?>
 												<!--begin::Add user-->
-												<a href="<?php echo base_url().'customer/add_customer';?>" class="btn btn-primary">
+												<a href="<?php echo base_url().'medicine/billing_customer';?>" class="btn btn-primary">
 												<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
 												<span class="svg-icon svg-icon-2">
 													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
@@ -206,22 +207,23 @@
 									<!--begin::Card body-->
 									<div class="card-body py-4">
 										<!--begin::Table-->
+
 										<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
 											<!--begin::Table head-->
 											<thead>
 												<!--begin::Table row-->
 												<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
 													<th class="min-w-50px">
-														ID.
+														Sr. No.
+													</th>
+													<th class="min-w-50px">
+														Billing. No.
 													</th>
 													<th class="min-w-125px">Customer Name</th>
-													<th class="min-w-125px"><!-- Post --></th>
-													<!-- <th class="min-w-125px">User Name</th> -->
-													<th class="min-w-125px">Phone Number</th>
-													<!-- <th class="min-w-50px">OTP</th> -->
-													<th class="min-w-50px"><!-- Worker --></th>
-													<th class="min-w-40px">Blood Group</th>
-													<th class="text-end min-w-100px">Actions</th>
+													<th class="min-w-125px">Total Amount</th>
+													<th class="min-w-125px">Payment Mode</th>
+													<th class="min-w-50px"></th>
+													<th class="min-w-100px">Created ON</th>
 												</tr>
 												<!--end::Table row-->
 											</thead>
@@ -229,136 +231,47 @@
 											<!--begin::Table body-->
 											<tbody class="text-gray-600 fw-bold">
 												<?php
-												if ($user_record) {
+												if ($billing_record) {
 													$i=0;
-													foreach ($user_record as $key => $value) {
+													foreach ($billing_record as $key => $value) {
 														$i++;
 														?>
 												<!--begin::Table row-->
 												<tr>
 													<!--begin::Checkbox-->
 													<td>
-														<?php echo $value->user_id;?>
+														<?php echo $i;?>
 													</td>
-													<!--end::Checkbox-->
-													<!--begin::User=-->
+													<td>
+														<?php echo date('Ymd',strtotime($value->bill_created_on)).$i;?>
+													</td>
+
 													<td class="d-flex align-items-center">
 														
-														<!--begin::User details-->
 														<div class="d-flex flex-column">
 															<a class="text-gray-800 text-hover-primary mb-1"><?php echo $value->user_first_name.' '.$value->user_last_name;?></a>
-															<!-- <span>e.smith@kpmg.com.au</span> -->
 														</div>
-														<!--begin::User details-->
 													</td>
-													<!--end::User=-->
-													<!--begin::Role=-->
-													<td><?php //echo $value->emp_type_name;?></td>
-													<!--end::Role=-->
-													<!--begin::Two step=-->
-													<!-- <td><?php echo $value->user_name;?></td> -->
-													<!--end::Two step=-->
-													<!--begin::Last login=-->
-													<!-- <td>
-														<?php echo $value->user_employee_id;?>
-													</td> -->
-													<!--end::Last login=-->
-													<!--begin::Joined-->
-													<td><?php echo $value->user_phone_number;?></td>
-													<!-- <td><?php echo $value->user_otp;?></td> -->
-													<td><!-- <?php 
-													$employee_type_se=array(
-														'0'=>'Confirmed',
-														'1'=>'Treated',
-														'1'=>'Cancelled',
-													);
-													echo $employee_type_se[$value->employee_type];?> --></td>
-													<td><?php 
-													/*if($value->user_status==1){
-														?>
-														<div class="badge badge-light-success fw-bolder">Enabled</div>
-														<?php
-													}else{
-														?>
-														<div class="badge badge-light-danger fw-bolder">Disabled</div>
-														<?php
-													}*/
-													echo $value->user_blood_group;
-													//echo $value->user_full_name;
-													?></td>
-													<!--begin::Joined-->
-													<!--begin::Action=-->
-													<td class="text-end">
-													<!--<a href="#" class="btn btn-light btn-active-light-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
-														
-														<span class="svg-icon svg-icon-5 m-0">
-															<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-																<path d="M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z" fill="black" />
-															</svg>
-														</span>
-														</a>-->
 
-														<a href="<?php echo base_url().'customer/update_customer/'.$value->user_id?>" class="btn btn-edit btn-active-edit-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Action</a>
-
-														<!-- <a href="<?php echo base_url().'patient/patient_history/'.$value->user_id?>" class="btn btn-history btn-active-history-primary btn-sm" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">History</a> -->
+													<td><?php echo $value->bill_total_net;?></td>
+													<td><?php echo $value->option_name;?></td>
+													<td></td>
+													
+													<td><?php echo date('Y-m-d',strtotime($value->bill_created_on));?></td>
 
 
-														<!--begin::Menu-->
-														<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4" data-kt-menu="true">
-																		
-															<?php
-															if ($this->admin->check_user_access('update-customer')) {
-																?>
-															<!--begin::Menu item-->
-															<div class="menu-item px-3">
-																<a href="<?php echo base_url().'customer/update_customer/'.$value->user_id?>" class="menu-link px-3">Edit</a>
-															</div>
-																<?php
-															}
-															?>
-
-
-															<?php
-															if ($this->admin->check_user_access('treatment-list')) {
-																?>
-															<!-- <div class="menu-item px-3">
-																<a href="<?php echo base_url().'patient/treatment/'.$value->user_id?>" class="menu-link px-3">Treatment</a>
-															</div> -->
-															<!--end::Menu item-->
-																<?php
-															}
-															?>
-
-
-															<?php
-															if ($this->admin->check_user_access('patient-history-list')) {
-																?>
-															<!-- <div class="menu-item px-3">
-																<a href="<?php echo base_url().'patient/patient_history/'.$value->user_id?>" class="menu-link px-3">History</a>
-															</div> -->
-																<?php
-															}
-															?>															
-															<!--begin::Menu item-->
-															<!-- <div class="menu-item px-3">
-																<a href="#" class="menu-link px-3" data-kt-users-table-filter="delete_row">Delete</a>
-															</div> -->
-															<!--end::Menu item-->
-														</div>
-														<!--end::Menu-->
-													</td>
-													<!--end::Action=-->
 												</tr>
 
 														<?php
 													}
 												}
 												?>
-												<!--end::Table row-->
+
 
 											</tbody>
-											<!--end::Table body-->
+
 										</table>
+
 										<!--end::Table-->
 									</div>
 									<!--end::Card body-->
@@ -371,8 +284,8 @@
 					</div>
 					<!--end::Content-->
 
-					<?php $this->load->view('footer.php'); ?>
-					<?php //include "footer.php"; ?>
+					<?php //include "footer.php"; 
+						$this->load->view("footer");?>
 
 				</div>
 				<!--end::Wrapper-->

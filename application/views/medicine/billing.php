@@ -148,6 +148,7 @@
 													<div class="row mb-12">
 														<!--begin::Col-->
 														<div class="col-md-12 fv-row">
+															<h3>Customer : <?php if(isset($patient_record[0]->user_first_name))echo $patient_record[0]->user_first_name.' '.$patient_record[0]->user_last_name.' | Mobile : '.$patient_record[0]->user_phone_number.'';?></h3>
 															<!--begin::Label-->
 															<label class="required fs-12 fw-bold mb-2">Product Name</label>
 
@@ -179,23 +180,23 @@
 													<!--end::Input group-->
 
 											<div class="fv-row mb-4">
-												<label class="required form-label fs-6 mb-2">IS Cutting</label>
+												<label class="required form-label fs-6 mb-2">Selling</label>
 											
 												<!--begin::Input-->
 												<input class="form-check-input me-3" name="is_cutting" type="radio" value="0" id="kt_modal_update_role_option_0" checked="checked">
 												<!--end::Input-->
 												<!--begin::Label-->
 												<label class="form-check-label" for="kt_modal_update_role_option_0">
-													<div class="fw-bolder text-gray-800">No</div>
+													<div class="fw-bolder text-gray-800">Packet</div>
 												</label>
 												<!--end::Label-->
 
 												<!--begin::Input-->
-												<input class="form-check-input me-3" name="is_cutting" type="radio" value="0" id="kt_modal_update_role_option_0" >
+												<input class="form-check-input me-3" name="is_cutting" type="radio" value="1" id="kt_modal_update_role_option_0" >
 												<!--end::Input-->
 												<!--begin::Label-->
 												<label class="form-check-label" for="kt_modal_update_role_option_0">
-													<div class="fw-bolder text-gray-800">Yes</div>
+													<div class="fw-bolder text-gray-800">Cutting</div>
 												</label>
 												<!--end::Label-->
 												<br>
@@ -240,21 +241,7 @@
 										<!--begin::Card title-->
 										<!--begin::Card toolbar-->
 										<div class="card-toolbar">
-											<!--begin::Toolbar-->
-											<div class="d-flex justify-content-end" data-kt-user-table-toolbar="base">
-												
-												<!--begin::Add user-->
-												
-												<!-- <a href="<?php echo base_url().'user/export_user_list';?>" class="btn btn-primary">
-												<span class="svg-icon svg-icon-2">
-													<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-														<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="black" />
-														<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="black" />
-													</svg>
-												</span>Export User</a> -->
 
-											</div>
-											<!--end::Toolbar-->
 											<!--begin::Group actions-->
 											<div class="d-flex justify-content-end align-items-center d-none" data-kt-user-table-toolbar="selected">
 												<div class="fw-bolder me-5">
@@ -269,6 +256,9 @@
 									<!--end::Card header-->
 									<!--begin::Card body-->
 									<div class="card-body py-4">
+
+										<form id="kt_modal_update_password_form" class="form" method="post" >
+
 										<!--begin::Table-->
 										<table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_table_users">
 											<!--begin::Table head-->
@@ -276,16 +266,15 @@
 												<!--begin::Table row-->
 												<tr class="text-start text-muted fw-bolder fs-7 text-uppercase gs-0">
 
-													<th class="min-w-125px">Sr. No. </th>
-													<th class="min-w-125px">Product Name </th>
-													<th class="min-w-125px">Unit </th>
-													<th class="min-w-125px">UOM </th>
-													<th class="min-w-125px">Batch </th>
-													<th class="min-w-125px">Expiry </th>
-													<th class="min-w-125px">Is Cutting </th>
-													<th class="min-w-125px">Qty </th>
-													<th class="min-w-125px">Amount </th>
-													<th class="text-end min-w-100px">Actions</th>
+													<th class="min-w-50px">Sr. No. </th>
+													<th class="min-w-100px">Product Name </th>
+													<th class="min-w-50px">Unit </th>
+													<th class="min-w-50px">Batch </th>
+													<th class="min-w-50px">Expiry </th>
+													<th class="min-w-50px">Cutting </th>
+													<th class="min-w-50px">Qty </th>
+													<th class="min-w-50px">MRP </th>
+													<th class="text-end min-w-50px">Actions</th>
 
 												</tr>
 
@@ -301,27 +290,32 @@
 												$scheme_cal=0;
 												
 
-												if ($this->session->userdata('billing_record')) {
-													$i=0;
-													foreach ($medicine_record as $key => $value) {
-														$i++;
+												if ($cart_record) {
+													$i=1;
+													foreach ($cart_record as $key => $value) {
+														
 														?>
 
 												<tr>
+													<td><?php echo $i;?></td>
 													<td>
 														<?php echo $value->stock_product_name;?>
 													</td>
-													<td><?php echo $value->stock_unit;?></td>
-													<td><?php echo $value->stock_uom;?></td>
-													<td><?php echo $value->stock_qty;?></td>
-													<td><?php echo $value->stock_sch;?></td>
+													<td><?php echo $value->stock_unit.' '.$value->stock_uom;?></td>
 													<td><?php echo $value->stock_batch;?></td>
-													<td><?php ?></td>
-													<td><?php ?></td>
+													<td><?php echo date('m-Y',strtotime($value->stock_expiry_date));?></td>
+													<td><?php if($value->is_cutting==1){echo "Yes";}else{echo "No";};?></td>
+													<td><?php echo $value->cart_qty;?></td>
+													<td>
+														<input type="text" size="5" class="cart_price" name="cart_price[<?php echo $value->cart_id;?>]" value="<?php echo $value->cart_price;?>">
+														<?php //echo 'Rs. '.$value->cart_price;
+													$total_amount+=$value->cart_price;
+													?></td>
 													<td><?php ?></td>
 												</tr>
 
 														<?php
+														$i++;
 													}
 												}
 
@@ -355,27 +349,25 @@
 
 						                    
 										<!--begin::Form-->
-										<form id="kt_modal_update_password_form" class="form" method="post" >
-
 											<div class="fv-row mb-4">
-												<label class=" form-label fs-6 mb-2">Total Amount : 0 Rs.</label>
-												<input class="form-control form-control-lg form-control-solid" type="hidden" placeholder="" name="stock_bill_number" autocomplete="off" value=""/>
+												<label class=" form-label fs-6 mb-2">Total Amount : Rs. <span class="total_amount1"><?php echo round($total_amount);?></span> </label>
+												<input class="form-control form-control-lg form-control-solid" type="hidden" placeholder="" id="total_amount" name="total_amount" autocomplete="off" value="<?php echo round($total_amount);?>"/>
 
-						                        <div style="color: red;"><?php echo form_error('stock_bill_number');?></div>
+						                        <div style="color: red;"><?php echo form_error('total_amount');?></div>
 											</div>
 
 											<div class="fv-row mb-4">
 												<label class=" form-label fs-6 mb-2">Discount</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_bill_number" autocomplete="off" value=""/>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" id="total_discount" name="total_discount" autocomplete="off" value="0"/>
 
-						                        <div style="color: red;"><?php echo form_error('stock_bill_number');?></div>
+						                        <div style="color: red;"><?php echo form_error('total_discount');?></div>
 											</div>
 
 											<div class="fv-row mb-4">
-												<label class=" form-label fs-6 mb-2">Net Amount</label>
-												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" name="stock_bill_number" autocomplete="off" value=""/>
+												<label class=" form-label fs-6 mb-2">Net Amount to Pay</label>
+												<input class="form-control form-control-lg form-control-solid" type="text" placeholder="" id="total_net" name="total_net" autocomplete="off" value="<?php echo round($total_amount);?>"/>
 
-						                        <div style="color: red;"><?php echo form_error('stock_bill_number');?></div>
+						                        <div style="color: red;"><?php echo form_error('total_net');?></div>
 											</div>
 
 
@@ -407,36 +399,34 @@
 											</div>
 											<!--end::Input group-->
 
-
 											<div class="d-flex flex-column mb-7 fv-row">
 												<!--begin::Label-->
 												<label class="fs-6 fw-bold mb-2">
-													<span class="">Patient</span>
+													<span class="">Payment Mode</span>
 													
 												</label>
 												<!--end::Label-->
 												<!--begin::Input-->
-												<select name="patient_id" aria-label="Select Employee Post" data-control="select2" data-placeholder="Select Patient..." class="form-select form-select-solid form-select-lg">
-													<option value="">Select Patient...</option>
+												<select name="bill_payment_mode" aria-label="Select Employee Post" data-control="select2" data-placeholder="Select Payment Mode..." class="form-select form-select-solid form-select-lg">
+													<!-- <option value="">Select Payment Mode...</option> -->
 													
 													<?php
-														foreach ($patient_record as $key2 => $value2) {
+														foreach ($bill_payment_mode as $key2 => $value2) {
 															?>
 																<option data-kt-flag="flags/indonesia.svg"
 																
-																 value="<?php echo $value2->user_id;?>"><?php echo $value2->user_first_name.' '.$value2->user_last_name;?></option>
+																 value="<?php echo $value2->option_id;?>"><?php echo $value2->option_name;?></option>
 															<?php
 														}
 													?>
 													
 												</select>
-													
-												</select>
 												<!--end::Input-->
 
-						                        <div style="color: red;"><?php echo form_error('user_employee_type');?></div>
+						                        <div style="color: red;"><?php echo form_error('bill_payment_mode');?></div>
 											</div>
 											<!--end::Input group-->
+
 
 											<!--begin::Actions-->
 											<div class="text-center pt-15">
@@ -505,6 +495,31 @@
 		<!--end::Javascript-->
 		<script type="text/javascript">
 			 //$('#kt_table_users').DataTable().ajax.reload(); 
+			 var total_net =0;
+
+			 $("#total_discount").focusout(function(){
+				var total_amount =$('#total_amount').val();
+				var total_discount =$('#total_discount').val();
+			 	total_net = total_amount - total_discount;
+			  	$("#total_net").val(total_net);
+
+			});
+
+			 $(".cart_price").focusout(function(){
+				
+			 	var sum = 0;
+				$('.cart_price').each(function(){
+				    sum += parseFloat($(this).val()); 
+				    $("#total_net").val(sum);
+				});
+				$('.total_amount1').text(sum);
+				$('#total_amount').val(sum);
+				var total_amount =$('#total_amount').val();
+				var total_discount =$('#total_discount').val();
+			 	total_net = total_amount - total_discount;
+			  	$("#total_net").val(total_net);
+			});
+			
 		</script>
 	</body>
 	<!--end::Body-->
